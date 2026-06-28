@@ -1,0 +1,185 @@
+➜  Docker-notes git:(main) ✗ pwd
+/mnt/c/Users/ahmad/OneDrive/Desktop/Docker-notes
+➜  Docker-notes git:(main) ✗ cd hello_flask 
+➜  hello_flask git:(main) ✗ 
+➜  hello_flask git:(main) ✗ pwd
+/mnt/c/Users/ahmad/OneDrive/Desktop/Docker-notes/hello_flask
+➜  hello_flask git:(main) ✗ 
+➜  hello_flask git:(main) ✗ ls -la
+total 0
+drwxrwxrwx 1 jahmad jahmad 512 Jun 28 13:59 .
+drwxrwxrwx 1 jahmad jahmad 512 Jun 28 12:54 ..
+drwxrwxrwx 1 jahmad jahmad 512 Jun 28 13:16 .venv
+-rwxrwxrwx 1 jahmad jahmad   0 Jun 28 13:59 Dockerfile
+-rwxrwxrwx 1 jahmad jahmad 196 Jun 28 12:55 app.py
+➜  hello_flask git:(main) ✗ 
+➜  hello_flask git:(main) ✗ docker build -f hello_flask/Dockerfile -t hello-flask hello_flask
+[+] Building 0.0s (0/0)                                                                                            docker:default
+ERROR: failed to build: unable to prepare context: path "hello_flask" not found
+➜  hello_flask git:(main) ✗ docker build -f hello_flask/Dockerfile -t hello-flask hello_flas 
+➜  hello_flask git:(main) ✗ docker build -f hello_flask/Dockerfile -t hello-flask hello_flas
+➜  hello_flask git:(main) ✗ docker build -f hello_flask/Dockerfile -t hello-flask hello_flas
+➜  hello_flask git:(main) ✗ docker build -f hello_flask/Dockerfile -t hello-flask hello_flas
+➜  hello_flask git:(main) ✗ docker build -t hello-flask .                                   
+[+] Building 0.1s (1/1) FINISHED                                                                                   docker:default
+ => [internal] load build definition from Dockerfile                                                                         0.0s
+ => => transferring dockerfile: 31B                                                                                          0.0s
+ERROR: failed to build: failed to solve: the Dockerfile cannot be empty
+➜  hello_flask git:(main) ✗ docker build -t hello_flask .
+[+] Building 0.1s (1/1) FINISHED                                                                                   docker:default
+ => [internal] load build definition from Dockerfile                                                                         0.0s
+ => => transferring dockerfile: 31B                                                                                          0.0s
+ERROR: failed to build: failed to solve: the Dockerfile cannot be empty
+➜  hello_flask git:(main) ✗ docker build -t hello-flask .
+[+] Building 0.1s (1/1) FINISHED                                                                                   docker:default
+ => [internal] load build definition from Dockerfile                                                                         0.0s
+ => => transferring dockerfile: 31B                                                                                          0.0s
+ERROR: failed to build: failed to solve: the Dockerfile cannot be empty
+➜  hello_flask git:(main) ✗ 
+➜  hello_flask git:(main) ✗ find . -name Dockerfile
+./Dockerfile
+➜  hello_flask git:(main) ✗ 
+➜  hello_flask git:(main) ✗ pwd
+ls -la
+cat Dockerfile
+wc -c Dockerfile
+/mnt/c/Users/ahmad/OneDrive/Desktop/Docker-notes/hello_flask
+total 0
+drwxrwxrwx 1 jahmad jahmad 512 Jun 28 13:59 .
+drwxrwxrwx 1 jahmad jahmad 512 Jun 28 12:54 ..
+drwxrwxrwx 1 jahmad jahmad 512 Jun 28 13:16 .venv
+-rwxrwxrwx 1 jahmad jahmad   0 Jun 28 13:59 Dockerfile
+-rwxrwxrwx 1 jahmad jahmad 196 Jun 28 12:55 app.py
+0 Dockerfile
+➜  hello_flask git:(main) ✗ cat Dockerfile 
+➜  hello_flask git:(main) ✗ 
+➜  hello_flask git:(main) ✗ cat Dockerfile 
+➜  hello_flask git:(main) ✗ cd hello_flask
+cd: no such file or directory: hello_flask
+➜  hello_flask git:(main) ✗ 
+➜  hello_flask git:(main) ✗ docker build -t hello-flask .
+[+] Building 0.1s (1/1) FINISHED                                                                                   docker:default
+ => [internal] load build definition from Dockerfile                                                                         0.0s
+ => => transferring dockerfile: 31B                                                                                          0.0s
+ERROR: failed to build: failed to solve: the Dockerfile cannot be empty
+➜  hello_flask git:(main) ✗ docker build -t hello-flask .
+[+] Building 21.9s (10/10) FINISHED                                                                                docker:default
+ => [internal] load build definition from Dockerfile                                                                         0.0s
+ => => transferring dockerfile: 153B                                                                                         0.0s
+ => [internal] load metadata for docker.io/library/python:3.8-slim                                                           2.5s
+ => [auth] library/python:pull token for registry-1.docker.io                                                                0.0s
+ => [internal] load .dockerignore                                                                                            0.0s
+ => => transferring context: 2B                                                                                              0.0s
+ => [1/4] FROM docker.io/library/python:3.8-slim@sha256:1d52838af602b4b5a831beb13a0e4d073280665ea7be7f69ce2382f29c5a613f    12.4s
+ => => resolve docker.io/library/python:3.8-slim@sha256:1d52838af602b4b5a831beb13a0e4d073280665ea7be7f69ce2382f29c5a613f     0.0s
+ => => sha256:a3f1dfe736c5f959143f23d75ab522a60be2da902efac236f4fb2a153cc14a5d 14.53MB / 14.53MB                             6.6s
+ => => sha256:030d7bdc20a63e3d22192b292d006a69fa3333949f536d62865d1bd0506685cc 3.51MB / 3.51MB                               1.9s
+ => => sha256:3971691a363796c39467aae4cdce6ef773273fe6bfc67154d01e1b589befb912 248B / 248B                                   0.4s
+ => => sha256:302e3ee498053a7b5332ac79e8efebec16e900289fc1ecd1c754ce8fa047fcab 29.13MB / 29.13MB                            10.5s
+ => => extracting sha256:302e3ee498053a7b5332ac79e8efebec16e900289fc1ecd1c754ce8fa047fcab                                    1.1s
+ => => extracting sha256:030d7bdc20a63e3d22192b292d006a69fa3333949f536d62865d1bd0506685cc                                    0.1s
+ => => extracting sha256:a3f1dfe736c5f959143f23d75ab522a60be2da902efac236f4fb2a153cc14a5d                                    0.5s
+ => => extracting sha256:3971691a363796c39467aae4cdce6ef773273fe6bfc67154d01e1b589befb912                                    0.0s
+ => [internal] load build context                                                                                            8.2s
+ => => transferring context: 16.45MB                                                                                         8.1s
+ => [2/4] WORKDIR /app                                                                                                       0.1s
+ => [3/4] COPY . /app/                                                                                                       0.2s
+ => [4/4] RUN pip install flask                                                                                              5.0s
+ => exporting to image                                                                                                       1.4s
+ => => exporting layers                                                                                                      0.7s
+ => => exporting manifest sha256:1b05243efc56b247f64634ed7f36d07862b28b4399f7f0f9bb7f50c9510bebf0                            0.0s
+ => => exporting config sha256:6115f656700671ef13cb2870026b2f4c2fc661cc35931ffa1fdbea2a31d536f3                              0.0s
+ => => exporting attestation manifest sha256:a444a65d1611b862f263492d6269b37692d5bb00c6e28cc2e76e8980b4a64ba3                0.0s
+ => => exporting manifest list sha256:8737da9428c16efc9567c69beb26c9ba644ef7393d5cd40169b446c932e126b1                       0.0s
+ => => naming to docker.io/library/hello-flask:latest                                                                        0.0s
+ => => unpacking to docker.io/library/hello-flask:latest                                                                     0.5s
+➜  hello_flask git:(main) ✗ docker run -d -p 5002:5002 hello-flask
+3932674f6c2d5a1384ad41d74489fa87c19b3d74ab318f5363b6806cd25c9484
+➜  hello_flask git:(main) ✗ docker ps
+CONTAINER ID   IMAGE         COMMAND           CREATED          STATUS          PORTS                                         NAMES
+3932674f6c2d   hello-flask   "python app.py"   27 seconds ago   Up 27 seconds   0.0.0.0:5002->5002/tcp, [::]:5002->5002/tcp   infallible_rhodes
+➜  hello_flask git:(main) ✗ docker stop 3932674f6c2d
+3932674f6c2d
+➜  hello_flask git:(main) ✗ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+➜  hello_flask git:(main) ✗ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   ../README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        ./
+
+no changes added to commit (use "git add" and/or "git commit -a")
+➜  hello_flask git:(main) ✗ git add .
+➜  hello_flask git:(main) ✗ git commit -m "Add Flash Docker project"
+[main dc3d247] Add Flash Docker project
+ 2 files changed, 21 insertions(+)
+ create mode 100644 hello_flask/Dockerfile
+ create mode 100644 hello_flask/app.py
+➜  hello_flask git:(main) ✗ git remote add origin https://github.com/ahmadjubair101/Docker-notes        
+git branch -M main
+git push -u origin main                                              
+error: remote origin already exists.
+Username for 'https://github.com': lss        
+Password for 'https://lss@github.com': 
+remote: Invalid username or token. Password authentication is not supported for Git operations.
+fatal: Authentication failed for 'https://github.com/ahmadjubair101/Docker-notes/'
+➜  hello_flask git:(main) ✗ git remove-v
+git: 'remove-v' is not a git command. See 'git --help'.
+
+The most similar command is
+        remote-fd
+➜  hello_flask git:(main) ✗ git remove -v
+git: 'remove' is not a git command. See 'git --help'.
+
+The most similar command is
+        remote
+➜  hello_flask git:(main) ✗ git remote -v
+origin  https://github.com/ahmadjubair101/Docker-notes (fetch)
+origin  https://github.com/ahmadjubair101/Docker-notes (push)
+➜  hello_flask git:(main) ✗ git push -u origin main
+Username for 'https://github.com': git remote -v
+Password for 'https://git%20remote%20-v@github.com': 
+remote: Invalid username or token. Password authentication is not supported for Git operations.
+fatal: Authentication failed for 'https://github.com/ahmadjubair101/Docker-notes/'
+➜  hello_flask git:(main) ✗ git remote -v
+origin  https://github.com/ahmadjubair101/Docker-notes (fetch)
+origin  https://github.com/ahmadjubair101/Docker-notes (push)
+➜  hello_flask git:(main) ✗ git config --global credential.helper manager
+➜  hello_flask git:(main) ✗ git push -u origin main
+git: 'credential-manager' is not a git command. See 'git --help'.
+Username for 'https://github.com': ff
+Password for 'https://ff@github.com': 
+git: 'credential-manager' is not a git command. See 'git --help'.
+remote: Invalid username or token. Password authentication is not supported for Git operations.
+fatal: Authentication failed for 'https://github.com/ahmadjubair101/Docker-notes/'
+➜  hello_flask git:(main) ✗ ls ~/.ssh
+agent  id_ed25519  id_ed25519.pub  jubair  jubair.pub  known_hosts  known_hosts.old
+➜  hello_flask git:(main) ✗ eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+Agent pid 8339
+Enter passphrase for /home/jahmad/.ssh/id_ed25519: 
+Identity added: /home/jahmad/.ssh/id_ed25519 (ahmadjubair101@gmail.com)
+➜  hello_flask git:(main) ✗ ssh -T git@github.com
+Hi ahmadjubair101! You've successfully authenticated, but GitHub does not provide shell access.
+➜  hello_flask git:(main) ✗ git remote set-url origin git@github.com:ahmadjubair101/Docker-notes.git
+➜  hello_flask git:(main) ✗ git remote -v
+origin  git@github.com:ahmadjubair101/Docker-notes.git (fetch)
+origin  git@github.com:ahmadjubair101/Docker-notes.git (push)
+➜  hello_flask git:(main) ✗ git push -u origin main
+Enumerating objects: 6, done.
+Counting objects: 100% (6/6), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 625 bytes | 16.00 KiB/s, done.
+Total 5 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To github.com:ahmadjubair101/Docker-notes.git
+   1050345..dc3d247  main -> main
+branch 'main' set up to track 'origin/main'.
+➜  hello_flask git:(main) ✗ 

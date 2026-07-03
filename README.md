@@ -39,5 +39,6 @@ Key concepts and tools applied in this challenge:
 - These services are managed and run through **Docker Compose**, ensuring the correct networking attributes and dependencies.
 - Utilising **persistent storage** with Docker volumes, so Redis data retains when containers are restarted.
 - Experimentation with **environment variables** and **scaling services** (bonus challenge).
+- Utilising a Load balancer to help manage the environment and to avoid the server from getting overwhelmed.
 
 By completing this challenge, I was able to understand how Docker allows consistent application deployment across environments and how containerisation simplifies development, testing and production workflows.

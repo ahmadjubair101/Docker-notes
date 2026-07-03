@@ -1,6 +1,6 @@
 # Docker Learning
 
-This repository showcases my learnings and findings of Docker, from note taking and important concepts to building and creating projects which include: understanding and running containers, managing multi-container applications with the usage of Docker Compose and utilising public and private registry's through Docker Hub and AWS ECR to push images. Applying these concepts into practical application has helped solidy my understanding of how this contributes to DevOps as a whole.
+This repository showcases my learnings and findings of Docker, from note taking and important concepts to building and creating projects which include: understanding and running containers, managing multi-container applications with the usage of Docker Compose and utilising public and private registry's through Docker Hub and AWS ECR to push images. Applying these concepts into practical application has helped solidify my understanding of how this contributes to DevOps as a whole.
 
 # Concepts and key information I have learnt
 - **What is Docker:** Understanding containers, their utility, comparisons to virtual machines, and why Docker is crucial in modern DevOps.

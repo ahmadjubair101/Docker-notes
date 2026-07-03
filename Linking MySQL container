@@ -1,0 +1,345 @@
+Here are the Docker file changes made:
+
+FROM python:3.8-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    gcc \
+    pkg-config \
+    default-libmysqlclient-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY . /app/
+
+RUN pip install --no-cache-dir flask mysqlclient
+
+EXPOSE 5002
+
+CMD ["python", "app.py"]
+
+
+
+Here are the changes made to the application:
+
+from flask import Flask
+import MySQLdb
+
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    # Connect to the MySQL database
+    db = MySQLdb.connect(
+        host="mydb",    # Hostname of the MySQL container
+        user="root",    # Username to connect to MySQL
+        passwd="my-secret-pw",  # Password for the MySQL user
+        db="mysql"      # Name of the database to connect to
+    )
+    cur = db.cursor()
+    cur.execute("SELECT VERSION()")
+    version = cur.fetchone()
+    return f'Hello, World! MySQL version: {version[0]}'
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5002)
+
+
+Changes made on the terminal including potential errors:
+
+➜  Docker-notes git:(main) ✗ docker network create my-custom-network
+
+The command 'docker' could not be found in this WSL 2 distro.
+We recommend to activate the WSL integration in Docker Desktop settings.
+
+For details about using Docker Desktop with WSL 2, visit:
+
+https://docs.docker.com/go/wsl2/
+
+➜  Docker-notes git:(main) ✗ docker network create my-custom-network
+5f8a342697bab1ed1f1096df7670a2a50504c30b048e14b1105168494e63b3a4
+➜  Docker-notes git:(main) ✗ docker run -d --name mydb my-custom-network -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql:5.7
+Unable to find image 'my-custom-network:latest' locally
+docker: Error response from daemon: pull access denied for my-custom-network, repository does not exist or may require 'docker login'
+
+Run 'docker run --help' for more information
+➜  Docker-notes git:(main) ✗ docker run -d --name mydb --network  my-custom-network -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql:5.7
+Unable to find image 'mysql:5.7' locally
+5.7: Pulling from library/mysql
+df9a4d85569b: Download complete 
+68c3898c2015: Downloading [===========>                                       ]  1.049MB/4.578MB
+df9a4d85569b: Pull complete 
+90986bb8de6e: Pull complete 
+43d05e938198: Pull complete 
+064b2d298fba: Pull complete 
+ae71319cb779: Pull complete 
+6b95a940e7b6: Pull complete 
+20e4dcae4c69: Pull complete 
+1c56c3d4ce74: Pull complete 
+e9f03a1c24ce: Pull complete 
+96889c47a44a: Download complete 
+9eb6a52b8441: Download complete 
+Digest: sha256:4bc6bc963e6d8443453676cae56536f4b8156d78bae03c0145cbe47c2aad73bb
+Status: Downloaded newer image for mysql:5.7
+53b9ac6a671bc8dec120ecacca3f546d862123c36a038d3cf8ba0c3f2e7482f4
+➜  Docker-notes git:(main) ✗  docker build -t hello-flask-mysql .
+[+] Building 0.1s (1/1) FINISHED                                                                                   docker:default
+ => [internal] load build definition from Dockerfile                                                                         0.0s
+ => => transferring dockerfile: 2B                                                                                           0.0s
+ERROR: failed to build: failed to solve: failed to read dockerfile: open Dockerfile: no such file or directory
+➜  Docker-notes git:(main) ✗ pwd
+/mnt/c/Users/ahmad/OneDrive/Desktop/Docker-notes
+➜  Docker-notes git:(main) ✗ cd hello-flask-mysql
+cd: no such file or directory: hello-flask-mysql
+➜  Docker-notes git:(main) ✗ cd hello-flask
+cd: no such file or directory: hello-flask
+➜  Docker-notes git:(main) ✗ pwd
+/mnt/c/Users/ahmad/OneDrive/Desktop/Docker-notes
+➜  Docker-notes git:(main) ✗ cd hello_flask
+➜  hello_flask git:(main) ✗ docker build -t hello-flask-mysql .
+[+] Building 18.1s (9/9) FINISHED                                                                                  docker:default
+ => [internal] load build definition from Dockerfile                                                                         0.0s
+ => => transferring dockerfile: 167B                                                                                         0.0s
+ => [internal] load metadata for docker.io/library/python:3.8-slim                                                           0.8s
+ => [auth] library/python:pull token for registry-1.docker.io                                                                0.0s
+ => [internal] load .dockerignore                                                                                            0.0s
+ => => transferring context: 2B                                                                                              0.0s
+ => [1/4] FROM docker.io/library/python:3.8-slim@sha256:1d52838af602b4b5a831beb13a0e4d073280665ea7be7f69ce2382f29c5a613f     0.0s
+ => => resolve docker.io/library/python:3.8-slim@sha256:1d52838af602b4b5a831beb13a0e4d073280665ea7be7f69ce2382f29c5a613f     0.0s
+ => [internal] load build context                                                                                           10.5s
+ => => transferring context: 127.30kB                                                                                       10.5s
+ => CACHED [2/4] WORKDIR /app                                                                                                0.0s
+ => [3/4] COPY . /app/                                                                                                       0.5s
+ => ERROR [4/4] RUN pip install flask mysqlclient                                                                            6.1s
+------
+ > [4/4] RUN pip install flask mysqlclient:
+3.054 Collecting flask
+3.142   Downloading flask-3.0.3-py3-none-any.whl (101 kB)
+3.197      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 101.7/101.7 kB 2.2 MB/s eta 0:00:00
+3.263 Collecting mysqlclient
+3.282   Downloading mysqlclient-2.2.7.tar.gz (91 kB)
+3.313      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.4/91.4 kB 3.4 MB/s eta 0:00:00
+3.338   Installing build dependencies: started
+5.807   Installing build dependencies: finished with status 'done'
+5.810   Getting requirements to build wheel: started
+5.961   Getting requirements to build wheel: finished with status 'error'
+5.967   error: subprocess-exited-with-error
+5.967   
+5.967   × Getting requirements to build wheel did not run successfully.
+5.967   │ exit code: 1
+5.967   ╰─> [30 lines of output]
+5.967       /bin/sh: 1: pkg-config: not found
+5.967       /bin/sh: 1: pkg-config: not found
+5.967       /bin/sh: 1: pkg-config: not found
+5.967       /bin/sh: 1: pkg-config: not found
+5.967       Trying pkg-config --exists mysqlclient
+5.967       Command 'pkg-config --exists mysqlclient' returned non-zero exit status 127.
+5.967       Trying pkg-config --exists mariadb
+5.967       Command 'pkg-config --exists mariadb' returned non-zero exit status 127.
+5.967       Trying pkg-config --exists libmariadb
+5.967       Command 'pkg-config --exists libmariadb' returned non-zero exit status 127.
+5.967       Trying pkg-config --exists perconaserverclient
+5.967       Command 'pkg-config --exists perconaserverclient' returned non-zero exit status 127.
+5.967       Traceback (most recent call last):
+5.967         File "/usr/local/lib/python3.8/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 353, in <module>
+5.967           main()
+5.967         File "/usr/local/lib/python3.8/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 335, in main
+5.967           json_out['return_val'] = hook(**hook_input['kwargs'])
+5.967         File "/usr/local/lib/python3.8/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 118, in get_requires_for_build_wheel
+5.967           return hook(config_settings)
+5.967         File "/tmp/pip-build-env-m0a3lrwo/overlay/lib/python3.8/site-packages/setuptools/build_meta.py", line 333, in get_requires_for_build_wheel
+5.967           return self._get_build_requires(config_settings, requirements=[])
+5.967         File "/tmp/pip-build-env-m0a3lrwo/overlay/lib/python3.8/site-packages/setuptools/build_meta.py", line 303, in _get_build_requires
+5.967           self.run_setup()
+5.967         File "/tmp/pip-build-env-m0a3lrwo/overlay/lib/python3.8/site-packages/setuptools/build_meta.py", line 319, in run_setup
+5.967           exec(code, locals())
+5.967         File "<string>", line 156, in <module>
+5.967         File "<string>", line 49, in get_config_posix
+5.967         File "<string>", line 28, in find_package_name
+5.967       Exception: Can not find valid pkg-config name.
+5.967       Specify MYSQLCLIENT_CFLAGS and MYSQLCLIENT_LDFLAGS env vars manually
+5.967       [end of output]
+5.967   
+5.967   note: This error originates from a subprocess, and is likely not a problem with pip.
+5.969 error: subprocess-exited-with-error
+5.969 
+5.969 × Getting requirements to build wheel did not run successfully.
+5.969 │ exit code: 1
+5.969 ╰─> See above for output.
+5.969 
+5.969 note: This error originates from a subprocess, and is likely not a problem with pip.
+5.978 
+5.978 [notice] A new release of pip is available: 23.0.1 -> 25.0.1
+5.978 [notice] To update, run: pip install --upgrade pip
+------
+Dockerfile:4
+--------------------
+   2 |     WORKDIR /app
+   3 |     COPY . /app/
+   4 | >>> RUN pip install flask mysqlclient
+   5 |     EXPOSE 5002
+   6 |     CMD ["python", "app.py"]
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c pip install flask mysqlclient" did not complete successfully: exit code: 1
+➜  hello_flask git:(main) ✗ pip install --upgrade pip          
+error: externally-managed-environment
+
+× This environment is externally managed
+╰─> To install Python packages system-wide, try apt install
+    python3-xyz, where xyz is the package you are trying to
+    install.
+    
+    If you wish to install a non-Debian-packaged Python package,
+    create a virtual environment using python3 -m venv path/to/venv.
+    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
+    sure you have python3-full installed.
+    
+    If you wish to install a non-Debian packaged Python application,
+    it may be easiest to use pipx install xyz, which will manage a
+    virtual environment for you. Make sure you have pipx installed.
+    
+    See /usr/share/doc/python3.14/README.venv for more information.
+
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
+hint: See PEP 668 for the detailed specification.
+➜  hello_flask git:(main) ✗ pip3 install --upgrade pip
+error: externally-managed-environment
+
+× This environment is externally managed
+╰─> To install Python packages system-wide, try apt install
+    python3-xyz, where xyz is the package you are trying to
+    install.
+    
+    If you wish to install a non-Debian-packaged Python package,
+    create a virtual environment using python3 -m venv path/to/venv.
+    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
+    sure you have python3-full installed.
+    
+    If you wish to install a non-Debian packaged Python application,
+    it may be easiest to use pipx install xyz, which will manage a
+    virtual environment for you. Make sure you have pipx installed.
+    
+    See /usr/share/doc/python3.14/README.venv for more information.
+
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
+hint: See PEP 668 for the detailed specification.
+➜  hello_flask git:(main) ✗ docker build -t hello-flask-mysql .
+[+] Building 13.5s (8/8) FINISHED                                                                                  docker:default
+ => [internal] load build definition from Dockerfile                                                                         0.0s
+ => => transferring dockerfile: 167B                                                                                         0.0s
+ => [internal] load metadata for docker.io/library/python:3.8-slim                                                           0.4s
+ => [internal] load .dockerignore                                                                                            0.0s
+ => => transferring context: 2B                                                                                              0.0s
+ => [1/4] FROM docker.io/library/python:3.8-slim@sha256:1d52838af602b4b5a831beb13a0e4d073280665ea7be7f69ce2382f29c5a613f     0.0s
+ => => resolve docker.io/library/python:3.8-slim@sha256:1d52838af602b4b5a831beb13a0e4d073280665ea7be7f69ce2382f29c5a613f     0.0s
+ => [internal] load build context                                                                                            9.2s
+ => => transferring context: 126.50kB                                                                                        9.2s
+ => CACHED [2/4] WORKDIR /app                                                                                                0.0s
+ => CACHED [3/4] COPY . /app/                                                                                                0.0s
+ => ERROR [4/4] RUN pip install flask mysqlclient                                                                            3.8s
+------
+ > [4/4] RUN pip install flask mysqlclient:
+1.331 Collecting flask
+1.406   Downloading flask-3.0.3-py3-none-any.whl (101 kB)
+1.441      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 101.7/101.7 kB 2.9 MB/s eta 0:00:00
+1.495 Collecting mysqlclient
+1.515   Downloading mysqlclient-2.2.7.tar.gz (91 kB)
+1.535      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.4/91.4 kB 4.6 MB/s eta 0:00:00
+1.551   Installing build dependencies: started
+3.592   Installing build dependencies: finished with status 'done'
+3.593   Getting requirements to build wheel: started
+3.746   Getting requirements to build wheel: finished with status 'error'
+3.752   error: subprocess-exited-with-error
+3.752   
+3.752   × Getting requirements to build wheel did not run successfully.
+3.752   │ exit code: 1
+3.752   ╰─> [30 lines of output]
+3.752       /bin/sh: 1: pkg-config: not found
+3.752       /bin/sh: 1: pkg-config: not found
+3.752       /bin/sh: 1: pkg-config: not found
+3.752       /bin/sh: 1: pkg-config: not found
+3.752       Trying pkg-config --exists mysqlclient
+3.752       Command 'pkg-config --exists mysqlclient' returned non-zero exit status 127.
+3.752       Trying pkg-config --exists mariadb
+3.752       Command 'pkg-config --exists mariadb' returned non-zero exit status 127.
+3.752       Trying pkg-config --exists libmariadb
+3.752       Command 'pkg-config --exists libmariadb' returned non-zero exit status 127.
+3.752       Trying pkg-config --exists perconaserverclient
+3.752       Command 'pkg-config --exists perconaserverclient' returned non-zero exit status 127.
+3.752       Traceback (most recent call last):
+3.752         File "/usr/local/lib/python3.8/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 353, in <module>
+3.752           main()
+3.752         File "/usr/local/lib/python3.8/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 335, in main
+3.752           json_out['return_val'] = hook(**hook_input['kwargs'])
+3.752         File "/usr/local/lib/python3.8/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 118, in get_requires_for_build_wheel
+3.752           return hook(config_settings)
+3.752         File "/tmp/pip-build-env-h5exhjzb/overlay/lib/python3.8/site-packages/setuptools/build_meta.py", line 333, in get_requires_for_build_wheel
+3.752           return self._get_build_requires(config_settings, requirements=[])
+3.752         File "/tmp/pip-build-env-h5exhjzb/overlay/lib/python3.8/site-packages/setuptools/build_meta.py", line 303, in _get_build_requires
+3.752           self.run_setup()
+3.752         File "/tmp/pip-build-env-h5exhjzb/overlay/lib/python3.8/site-packages/setuptools/build_meta.py", line 319, in run_setup
+3.752           exec(code, locals())
+3.752         File "<string>", line 156, in <module>
+3.752         File "<string>", line 49, in get_config_posix
+3.752         File "<string>", line 28, in find_package_name
+3.752       Exception: Can not find valid pkg-config name.
+3.752       Specify MYSQLCLIENT_CFLAGS and MYSQLCLIENT_LDFLAGS env vars manually
+3.752       [end of output]
+3.752   
+3.752   note: This error originates from a subprocess, and is likely not a problem with pip.
+3.754 error: subprocess-exited-with-error
+3.754 
+3.754 × Getting requirements to build wheel did not run successfully.
+3.754 │ exit code: 1
+3.754 ╰─> See above for output.
+3.754 
+3.754 note: This error originates from a subprocess, and is likely not a problem with pip.
+3.760 
+3.760 [notice] A new release of pip is available: 23.0.1 -> 25.0.1
+3.760 [notice] To update, run: pip install --upgrade pip
+------
+Dockerfile:4
+--------------------
+   2 |     WORKDIR /app
+   3 |     COPY . /app/
+   4 | >>> RUN pip install flask mysqlclient
+   5 |     EXPOSE 5002
+   6 |     CMD ["python", "app.py"]
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c pip install flask mysqlclient" did not complete successfully: exit code: 1
+➜  hello_flask git:(main) ✗ docker build --no-cache -t hello-flask-mysql .
+[+] Building 84.4s (11/11) FINISHED                                                                                docker:default
+ => [internal] load build definition from Dockerfile                                                                         0.0s
+ => => transferring dockerfile: 339B                                                                                         0.0s
+ => [internal] load metadata for docker.io/library/python:3.8-slim                                                           0.7s
+ => [auth] library/python:pull token for registry-1.docker.io                                                                0.0s
+ => [internal] load .dockerignore                                                                                            0.0s
+ => => transferring context: 2B                                                                                              0.0s
+ => [1/5] FROM docker.io/library/python:3.8-slim@sha256:1d52838af602b4b5a831beb13a0e4d073280665ea7be7f69ce2382f29c5a613f     0.0s
+ => => resolve docker.io/library/python:3.8-slim@sha256:1d52838af602b4b5a831beb13a0e4d073280665ea7be7f69ce2382f29c5a613f     0.0s
+ => [internal] load build context                                                                                           11.6s
+ => => transferring context: 126.82kB                                                                                       11.5s
+ => CACHED [2/5] WORKDIR /app                                                                                                0.0s
+ => [3/5] RUN apt-get update && apt-get install -y     gcc     pkg-config     default-libmysqlclient-dev     && rm -rf /va  63.7s
+ => [4/5] COPY . /app/                                                                                                       0.3s
+ => [5/5] RUN pip install --no-cache-dir flask mysqlclient                                                                   7.7s
+ => exporting to image                                                                                                      11.8s
+ => => exporting layers                                                                                                      7.9s
+ => => exporting manifest sha256:87c94bfb727a10624d8d2f977e85edf490200d0bad8e59d42667651cdeed6b2d                            0.0s
+ => => exporting config sha256:c0f2b8f0ea3667621974a24fa9f61ed8eee6a7c573c1e81f12448e83eacf4923                              0.0s
+ => => exporting attestation manifest sha256:90c071cbc36667eb5bb90bb45f4aeead5fe069ab91d739527e19dd5048a18720                0.0s
+ => => exporting manifest list sha256:c7a3f0b7447db5444cd8c8bc0b07c974a41f89cee19091e75ccd194b12335907                       0.0s
+ => => naming to docker.io/library/hello-flask-mysql:latest                                                                  0.0s
+ => => unpacking to docker.io/library/hello-flask-mysql:latest                                                               3.8s
+➜  hello_flask git:(main) ✗ docker run -d --name myapp --network my-custom-network -p 5002:5002 hello-flask-mysql
+dfa490a115d08bc3327d852432fc50acbc98de26077a773ca866b99f5bb907aa
+➜  hello_flask git:(main) ✗ docker ps
+CONTAINER ID   IMAGE               COMMAND                  CREATED              STATUS              PORTS                                         NAMES
+dfa490a115d0   hello-flask-mysql   "python app.py"          About a minute ago   Up About a minute   0.0.0.0:5002->5002/tcp, [::]:5002->5002/tcp   myapp
+53b9ac6a671b   mysql:5.7           "docker-entrypoint.s…"   16 minutes ago       Up 16 minutes       3306/tcp, 33060/tcp                           mydb
+➜  hello_flask git:(main) ✗ 
+
+
+
+
